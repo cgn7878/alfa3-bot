@@ -99,3 +99,6 @@ def sinyal_uret(analiz):
     yorum.append(f"Bollinger: Alt={boll[0]} Üst={boll[1]}")
 
     return "\n".join(yorum)
+     def run_bot():
+    client = NewsBot()
+    client.run()
