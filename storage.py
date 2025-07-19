@@ -1,32 +1,38 @@
+# storage.py
+
 import json
 import os
 
-DATA_FILE = "data.json"
+DATA_FILE = "followed_coins.json"
 
-def _load_data():
+def load_followed_coins():
     if not os.path.exists(DATA_FILE):
-        return {}
-    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        return []
+    with open(DATA_FILE, "r") as f:
         try:
             return json.load(f)
         except json.JSONDecodeError:
-            return {}
+            return []
 
-def _save_data(data):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
+def save_followed_coins(coins):
+    with open(DATA_FILE, "w") as f:
+        json.dump(coins, f, indent=2)
 
-def get(key, default=None):
-    data = _load_data()
-    return data.get(key, default)
+def get_followed_coins():
+    return load_followed_coins()
 
-def set(key, value):
-    data = _load_data()
-    data[key] = value
-    _save_data(data)
+def add_coin_to_follow(coin_id):
+    coins = load_followed_coins()
+    if coin_id not in coins:
+        coins.append(coin_id)
+        save_followed_coins(coins)
+        return True
+    return False
 
-def delete(key):
-    data = _load_data()
-    if key in data:
-        del data[key]
-        _save_data(data)
+def remove_coin_from_follow(coin_id):
+    coins = load_followed_coins()
+    if coin_id in coins:
+        coins.remove(coin_id)
+        save_followed_coins(coins)
+        return True
+    return False
